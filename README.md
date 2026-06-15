@@ -2,12 +2,24 @@
 
 适用于 Clash Verge Rev 的极简分流与防污染配置模板，代理层基于 WireGuard（可配合 Wstunnel 等隧道）。
 
+**这是一个持续更新的项目**，跟随博客文章的实践进度不断优化和完善配置方案。
+
+---
+
+## 📅 更新日志
+
+| 版本 | 日期 | 主要改进 | 状态 |
+|------|------|----------|------|
+| **v2** | 2026-06-15 | 新增 DNS 最小覆写配置，解决 Google 污染问题 | ✅ 稳定 |
+| **v1** | 2026-06-14 | 基于 MetaCubeX 的极简分流规则初版 | ✅ 稳定 |
+
 ## 🌟 核心特点
 
 - **极简原则**：回归 MetaCubeX geosite.dat + geoip.dat 模型，用"地理归类"替代"手工规则维护"
-- **稳定性优先**：简化 DNS 配置，避免 fallback DNS 和复杂规则冲突
+- **稳定性优先**：v2 版本新增 DNS 最小覆写配置，解决 Google 污染问题
 - **跨平台支持**：适配 Windows + Ubuntu + Android 多端环境
 - **可维护性强**：结构最小化，便于排查问题
+- **持续更新**：跟随博客实践进度不断优化
 
 ## 🔧 技术栈
 
@@ -59,6 +71,27 @@ VPS
 3. **中国大陆直连**：GEOSITE,cn + GEOIP,CN
 4. **非中国大陆走代理**：GEOSITE,geolocation-!cn
 5. **默认兜底**：全部走代理
+
+### v2 版本 DNS 最小覆写（核心改进）
+
+v2 版本新增 DNS 配置，解决 Google 等境外域名被污染的问题：
+
+```yaml
+dns:
+  nameserver:
+    - https://dns.alidns.com/dns-query  # 国内域名使用阿里 DoH，直连
+  proxy: Proxy  # 关键：让 fallback 查询走代理，避免本地 DNS 污染
+  fallback:
+    - tls://1.1.1.1:853  # 境外域名使用 Cloudflare DoT
+  fallback-filter:
+    geoip: true
+    geoip-code: CN  # 只有非 CN 域名才触发 fallback
+```
+
+**原理说明**：
+- `proxy: Proxy` 强制让 fallback 查询通过 WireGuard 隧道发出
+- 彻底绕开本地 DNS 污染，获取正确的境外域名 IP
+- 保持国内域名解析速度不受影响
 
 ## ⚠️ 注意事项
 
