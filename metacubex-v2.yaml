@@ -1,0 +1,76 @@
+# ==============================================
+# ZgoCloud + Wstunnel + WireGuard
+# MetaCubeX 极简稳定版 v2 (minimal DNS fix)
+#
+# 特点：
+# - 最小化 DNS 覆写（仅防污染）
+# - 不使用 SMTP / Google / YouTube 特殊规则
+# - 基于 GEOSITE + GEOIP
+# - 结构最小化，便于排错
+# ==============================================
+
+# ----- 通用设置 -----
+profile:
+  store-selected: true # 记住用户在 Proxy 组中手动选择的节点（重启后不丢失）
+
+# ----- DNS 最小覆写（防污染） -----
+dns:
+  # 国内域名解析：使用阿里公共 DNS over HTTPS，直连不经过代理
+  nameserver:
+    - https://dns.alidns.com/dns-query
+
+  # 【关键】让所有 DNS 查询（特别是 fallback）都通过代理组 Proxy 发出，避免本地 DNS 污染
+  proxy: Proxy
+
+  # 境外域名解析：使用 Cloudflare DNS over TLS，解析结果由代理隧道保护
+  fallback:
+    - tls://1.1.1.1:853
+
+  # 只让非中国 IP 的域名使用 fallback，国内域名强制走 nameserver
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+
+# ----- 代理节点定义 -----
+proxies:
+  - name: ZgoCloud-WG # 节点名称，可自定义
+    type: wireguard # 类型：WireGuard
+    server: 127.0.0.1 # 【必须修改】WireGuard 服务器的地址（此处为本地 wstunnel 映射端口）
+    port: 51820 # 【必须修改】WireGuard 端口
+
+    ip: 10.7.0.2 # 【必须修改】分配给本机的 WireGuard 内网 IP
+
+    public-key: a4DvxU7LgW0069MbHpMMhcc16eo8j71mPvW+xDBP6xk= # 【必须修改】服务器公钥
+    private-key: yBdtV4+0CxvTFvXWrPS+sMaWD2PAQ7XHrhCcE48eLmk= # 【必须修改】本机私钥
+    pre-shared-key: 3glNI413OnTF2mAJLo9JSFG/Hb/jZpgEqR5z9Gc8x9g= # 【必须修改】预共享密钥
+
+    udp: true # 启用 UDP 转发
+    mtu: 1280 # MTU，若遇部分网站卡顿可尝试调整为 1200 或 1000
+
+# ----- 代理组 -----
+proxy-groups:
+  - name: Proxy # 代理组名称，被分流规则引用
+    type: select # 类型：手动选择
+    proxies:
+      - ZgoCloud-WG # 主代理节点
+      - DIRECT # 直连（不走代理）
+
+# ----- 分流规则（基于地理数据集） -----
+rules:
+  # Wstunnel 服务器 IP 强制直连，避免隧道自身流量回环（no-resolve 表示仅匹配 IP 规则，不触发 DNS 解析）
+  - IP-CIDR,154.21.196.249/32,DIRECT,no-resolve # 【必须修改】替换为你的 Wstunnel 服务器公网 IP
+
+  # 本地/私有网络直连
+  - GEOSITE,private,DIRECT
+  - GEOIP,private,DIRECT,no-resolve
+
+  # 中国大陆域名和 IP 直连，保证国内访问速度
+  - GEOSITE,cn,DIRECT
+  - GEOIP,CN,DIRECT,no-resolve
+
+  # 所有非中国大陆域名走代理
+  - GEOSITE,geolocation-!cn,Proxy
+
+  # 未匹配到任何规则的流量，默认走代理（防止泄漏）
+  - MATCH,Proxy
+
