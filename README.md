@@ -123,6 +123,7 @@ rules:
 ## 📚 相关资源
 
 - [Clash Verge Rev 官方文档](https://github.com/zzzgydi/clash-verge-rev)
+- [FlClash 官方文档](https://github.com/6核心/flclash)
 - [MetaCubeX 项目](https://github.com/MetaCubeX)
 - [WireGuard 官方文档](https://www.wireguard.com/)
 - [Wstunnel 项目](https://github.com/erebe/wstunnel)
