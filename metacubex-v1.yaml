@@ -1,9 +1,10 @@
 # ==============================================
 # ZgoCloud + Wstunnel + WireGuard
 # MetaCubeX 极简稳定版 v1 (clean)
+# 兼容：Clash Verge Rev / FlClash
 #
 # 特点：
-# - 不使用 DNS 覆写（交给 Verge）
+# - 不使用 DNS 覆写（交给客户端）
 # - 不使用 SMTP / Google / YouTube 特殊规则
 # - 基于 GEOSITE + GEOIP
 # - 结构最小化，便于排错

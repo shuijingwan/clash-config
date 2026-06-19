@@ -1,6 +1,7 @@
 # ==============================================
 # ZgoCloud + Wstunnel + WireGuard
 # MetaCubeX 极简稳定版 v2 (minimal DNS fix)
+# 兼容：Clash Verge Rev / FlClash
 #
 # 特点：
 # - 最小化 DNS 覆写（仅防污染）

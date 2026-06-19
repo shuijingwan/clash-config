@@ -1,6 +1,6 @@
-# Clash Verge Rev 极简分流配置
+# Clash Verge Rev / FlClash 极简分流配置
 
-适用于 Clash Verge Rev 的极简分流与防污染配置模板，代理层基于 WireGuard（可配合 Wstunnel 等隧道）。
+适用于 Clash Verge Rev 和 FlClash 的极简分流与防污染配置模板，代理层基于 WireGuard（可配合 Wstunnel 等隧道）。
 
 **这是一个持续更新的项目**，跟随博客文章的实践进度不断优化和完善配置方案。
 
