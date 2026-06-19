@@ -123,7 +123,7 @@ rules:
 ## 📚 相关资源
 
 - [Clash Verge Rev 官方文档](https://github.com/zzzgydi/clash-verge-rev)
-- [FlClash 官方文档](https://github.com/6核心/flclash)
+- [FlClash 官方文档](https://github.com/chen08209/FlClash)
 - [MetaCubeX 项目](https://github.com/MetaCubeX)
 - [WireGuard 官方文档](https://www.wireguard.com/)
 - [Wstunnel 项目](https://github.com/erebe/wstunnel)
@@ -134,7 +134,7 @@ rules:
 
 - [Clash Verge Rev + WireGuard + Wstunnel 稳定配置实践（一）：极简原则与初版构建](https://www.shuijingwanwq.com/2026/06/14/17084/)
 - [Clash Verge Rev + WireGuard + Wstunnel 稳定配置实践（二）：Google 污染的 DNS 最小修正](https://www.shuijingwanwq.com/2026/06/15/17114/)
-- [Clash Verge Rev + WireGuard + Wstunnel 稳定配置实践（三）：Google Play 下载问题解决](https://www.shuijingwanwq.com/2026/06/19/17146/)
+- [FlClash + WireGuard + Wstunnel 稳定配置实践（三）：Google Play 下载问题解决](https://www.shuijingwanwq.com/2026/06/19/17374/)
 
 ## 📄 许可证
 
