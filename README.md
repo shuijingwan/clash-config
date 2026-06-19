@@ -10,6 +10,7 @@
 
 | 版本 | 日期 | 主要改进 | 状态 |
 |------|------|----------|------|
+| **v3** | 2026-06-19 | 将 GEOSITE,google 前置到 private 之前，确保 Google 服务优先走代理 | ✅ 稳定 |
 | **v2** | 2026-06-15 | 新增 DNS 最小覆写配置，解决 Google 污染问题 | ✅ 稳定 |
 | **v1** | 2026-06-14 | 基于 MetaCubeX 的极简分流规则初版 | ✅ 稳定 |
 
@@ -93,6 +94,26 @@ dns:
 - 彻底绕开本地 DNS 污染，获取正确的境外域名 IP
 - 保持国内域名解析速度不受影响
 
+### v3 版本 Google 优先代理（Play 下载优化）
+
+v3 版本将 `GEOSITE,google` 规则前置到 `GEOSITE,private` 之前，实测可解决 Google Play 下载问题：
+
+```yaml
+rules:
+  - GEOSITE,google  # 【关键】前置确保 Google 服务优先走代理
+  - GEOSITE,private
+  - GEOIP,private
+  - GEOSITE,cn
+  - GEOIP,CN
+  - GEOSITE,geolocation-!cn
+  - MATCH,Proxy
+```
+
+**原理说明**：
+- Google Play 下载需要连接 Google 服务器，原规则中 private 优先导致部分 Google 流量被直连
+- 将 google 规则前置，确保所有 Google 服务都走代理
+- 配合 v2 的 DNS 配置，彻底解决 Play 下载失败问题
+
 ## ⚠️ 注意事项
 
 - 不同地区网络环境、DNS 行为以及 VPS 线路质量，都会影响最终效果
@@ -112,6 +133,7 @@ dns:
 
 - [Clash Verge Rev + WireGuard + Wstunnel 稳定配置实践（一）：极简原则与初版构建](https://www.shuijingwanwq.com/2026/06/14/17084/)
 - [Clash Verge Rev + WireGuard + Wstunnel 稳定配置实践（二）：Google 污染的 DNS 最小修正](https://www.shuijingwanwq.com/2026/06/15/17114/)
+- [Clash Verge Rev + WireGuard + Wstunnel 稳定配置实践（三）：Google Play 下载问题解决](https://www.shuijingwanwq.com/2026/06/19/17146/)
 
 ## 📄 许可证
 
